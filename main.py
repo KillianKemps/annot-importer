@@ -16,3 +16,35 @@ import csv
 
 if __name__ == '__main__':
     arguments = docopt(__doc__)
+    annotation_file = arguments['ANNOTATION_FILE']
+    print("Converting {0}".format(arguments['ANNOTATION_FILE']))
+
+    annotations = []
+
+    # Import
+    with open(annotation_file) as file:
+
+        # Check if CSV has a header
+        has_header = csv.Sniffer().has_header(file.read(1024))
+        # Rewind file
+        file.seek(0)
+        reader = csv.reader(file, delimiter=';')
+        if has_header:
+            next(reader)
+
+        for row in reader:
+            annotation = {}
+            annotation['page'] = row[3]
+            annotation['quote'] = row[4]
+            annotations.append(annotation)
+
+    # Export
+    export_location = 'export.md'
+    export_file = open(export_location, 'w')
+    for annotation in annotations:
+        quote = annotation['quote']
+        page = annotation['page']
+
+        quote = quote.strip().replace('\n', '\n> ')
+        export_file.write("> {0} *(p.{1})*\n\n".format(quote, page))
+    export_file.close()
