@@ -22,6 +22,11 @@ if __name__ == '__main__':
     raw_filename = filename.split('.')[0]
     print("Converting {0}".format(filename))
 
+    # Create exports folder if doesn't exist
+    folder_name = 'exports'
+    if not os.path.exists(folder_name):
+        os.makedirs(folder_name)
+
     annotations = []
 
     # Import
@@ -43,7 +48,7 @@ if __name__ == '__main__':
 
     # Export
     export_location = '{0}.md'.format(raw_filename)
-    export_file = open(export_location, 'w')
+    export_file = open(folder_name + '/' + export_location, 'w')
     for annotation in annotations:
         quote = annotation['quote']
         page = annotation['page']
