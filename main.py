@@ -13,11 +13,14 @@ Options:
 
 from docopt import docopt
 import csv
+import os
 
 if __name__ == '__main__':
     arguments = docopt(__doc__)
     annotation_file = arguments['ANNOTATION_FILE']
-    print("Converting {0}".format(arguments['ANNOTATION_FILE']))
+    filename = os.path.basename(arguments['ANNOTATION_FILE'])
+    raw_filename = filename.split('.')[0]
+    print("Converting {0}".format(filename))
 
     annotations = []
 
@@ -39,7 +42,7 @@ if __name__ == '__main__':
             annotations.append(annotation)
 
     # Export
-    export_location = 'export.md'
+    export_location = '{0}.md'.format(raw_filename)
     export_file = open(export_location, 'w')
     for annotation in annotations:
         quote = annotation['quote']
